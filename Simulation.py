@@ -137,8 +137,9 @@ def Simulate(Cells):
                 # 8: For each cell, gets its new position and adds it to record of positions of each cell for each tick         
                 NewPosition.append([cell.Position.X,cell.Position.Y])
             RecordedPositions.append(NewPosition)
+            input()
             plt.pause(0.025)
-
+    
     # 4: Carries out simulation for number of ticks defined in SimulationVariables.py
     # If running as a replay, runs the simulation through and saves position of each cell at each tick, then draws animation based on saved data.
     elif SimulationVariables.SimulationType == "Replay":

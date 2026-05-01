@@ -35,23 +35,25 @@
 
 #TO DO:
 
+#0: Fix inability to close during animation - add something to handle user input
+
 #1: Is there some way to avoid oscilations and bouncing apart in nearby cells - adhesion pulls them together then repulsion pushes them apart
 
-#4: Adjust animations to allow interaction during pauses
+#2: Adjust animations to allow interaction during pauses
 
-#5: Comment CellClasses.py
-############5.1: Add workflow to comments above
-############5.2: Finsih comments in Simulation function
+#3: Comment CellClasses.py
+############3.1: Add workflow to comments above
+############3.2: Finsih comments in Simulation function
 
-#6: Consider changes to adjacency at diagonals
-############6.2: For adjacency, consider cell at 45 degrees but slightly further due to packing as just as adjacent as one as 90 degrees?
-##########################6.2.1: But one at 45 degrees an absolutely adjacent is not closer than one at 90 degrees and adjacent
+#4: Consider changes to adjacency at diagonals
+############4.2: For adjacency, consider cell at 45 degrees but slightly further due to packing as just as adjacent as one as 90 degrees?
+##########################4.2.1: But one at 45 degrees an absolutely adjacent is not closer than one at 90 degrees and adjacent
 
-#7: Improvements to cell arrangement and packing density
-############7.1: Custom packing algorithm for circles
-##########################7.1.1: Remember, circles are only acting as models for cells - no need for complexity provided by ellipses
-############7.2: Finish "Fill" arrangement 
-############7.3: Random variation in cell size
+#5: Improvements to cell arrangement and packing density
+############5.1: Custom packing algorithm for circles
+##########################5.1.1: Remember, circles are only acting as models for cells - no need for complexity provided by ellipses
+############5.2: Finish "Fill" arrangement 
+############5.3: Random variation in cell size
 
 #####################################################################################################################################
 
@@ -64,11 +66,21 @@ Repeats = 3
 #migration speed 0.0005, 0.001, 0.005, 0.01,0.05,0.1
 #internal force 0.05,0.01,0.005
 
-migration_speeds = [0.0005, 0.001, 0.005, 0.01,0.05,0.1]
+#migration_speeds = [0.0005, 0.001, 0.005, 0.01,0.05,0.1]
+migration_speeds = [0.01,0.05,0.1]
 adhesion_force_others = [0.0001,0.0005,0.001, 0.005, 0.01,0.05,0.1]
 adhesion_force_pmec_multiples = [0.75,1,1.5,2]
 internal_forces = [0.001, 0.005, 0.01, 0.05, 0.1]
+
+migration_speeds = [0.05]
+adhesion_force_others = [0.005]
+adhesion_force_pmec_multiples = [1]
+internal_forces = [0.001]
+f = open("output.txt", "w")
+f.write("migration_speed,adhesion_force_other,adhesion_force_pmec_multiple,internal_force,repeat,type,average_speed_x,average_speed_total\n")
 print("migration_speed,adhesion_force_other,adhesion_force_pmec_multiple,internal_force,repeat,type,average_speed_x,average_speed_total")
+
+
 
 for migration_speed in migration_speeds:
     SimulationVariables.MigrationSpeed = migration_speed
@@ -80,12 +92,22 @@ for migration_speed in migration_speeds:
                 CellVariables.OverallCellTypes[0].Interactions.InternalForce = internal_force
                 CellVariables.OverallCellTypes[2].Interactions.InternalForce = internal_force
                 for i in range (Repeats):
-
+                    print(migration_speed,adhesion_force,multiple,internal_force,i)
                     Cells = Simulation.InitialiseCells()
                     Cells, RecordedPositions = Simulation.Simulate(Cells)
                     Results = Simulation.Results(Cells, RecordedPositions)
 
                     for item in Results:
-                        print(migration_speed,adhesion_force,multiple,internal_force,i,item[0],(item[2]/item[1])/(SimulationVariables.TickNumber*SimulationVariables.TickLength),(item[3]/item[1])/(SimulationVariables.TickNumber*SimulationVariables.TickLength))
+                        f.write(str(migration_speed)+"," + 
+                                str(adhesion_force) + "," + 
+                                str(multiple) + "," + 
+                                str(internal_force) + "," + 
+                                str(i) + "," + 
+                                str(item[0]) + "," + 
+                                str((item[2]/item[1])/(SimulationVariables.TickNumber*SimulationVariables.TickLength)) + "," + 
+                                str((item[3]/item[1])/(SimulationVariables.TickNumber*SimulationVariables.TickLength)))
+                        f.write('\n')
+                        
+f.close()
 
             

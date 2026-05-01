@@ -3,6 +3,7 @@ This project uses a 2D off-lattice centre-based model to model the migration of 
 Requirements
 ------------
 Python
+
 Matplotlib
 
 Simulation

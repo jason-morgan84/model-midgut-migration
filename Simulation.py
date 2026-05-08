@@ -119,7 +119,8 @@ def Simulate(Cells):
     # If running in real time, runs simulation, animates and saves position of each cell at each tick
     if SimulationVariables.SimulationType == "RealTime":
         for tick in range(SimulationVariables.TickNumber):
-            timer.set_text(str(tick*SimulationVariables.TickLength) + "s")
+            print(tick)
+            timer.set_text(str(tick * SimulationVariables.TickLength) + "s")
             # update network of neighbouring cells
             Cells.GenerateNodeNetwork(1)
 
@@ -137,7 +138,6 @@ def Simulate(Cells):
                 # 8: For each cell, gets its new position and adds it to record of positions of each cell for each tick         
                 NewPosition.append([cell.Position.X,cell.Position.Y])
             RecordedPositions.append(NewPosition)
-            input()
             plt.pause(0.025)
     
     # 4: Carries out simulation for number of ticks defined in SimulationVariables.py

@@ -36,6 +36,7 @@
 #TO DO:
 
 #0: Fix inability to close during animation - add something to handle user input
+# https://matplotlib.org/stable/users/explain/figure/interactive_guide.html
 
 #1: Is there some way to avoid oscilations and bouncing apart in nearby cells - adhesion pulls them together then repulsion pushes them apart
 
@@ -67,16 +68,16 @@ Repeats = 3
 #internal force 0.05,0.01,0.005
 
 #migration_speeds = [0.0005, 0.001, 0.005, 0.01,0.05,0.1]
-migration_speeds = [0.01,0.05,0.1]
+migration_speeds = [0.005]
 adhesion_force_others = [0.0001,0.0005,0.001, 0.005, 0.01,0.05,0.1]
 adhesion_force_pmec_multiples = [0.75,1,1.5,2]
 internal_forces = [0.001, 0.005, 0.01, 0.05, 0.1]
 
-migration_speeds = [0.05]
-adhesion_force_others = [0.005]
-adhesion_force_pmec_multiples = [1]
+migration_speeds = [0.01]
+adhesion_force_others = [0.0005]
+adhesion_force_pmec_multiples = [2]
 internal_forces = [0.001]
-f = open("output.txt", "w")
+f = open("output2.txt", "w")
 f.write("migration_speed,adhesion_force_other,adhesion_force_pmec_multiple,internal_force,repeat,type,average_speed_x,average_speed_total\n")
 print("migration_speed,adhesion_force_other,adhesion_force_pmec_multiple,internal_force,repeat,type,average_speed_x,average_speed_total")
 

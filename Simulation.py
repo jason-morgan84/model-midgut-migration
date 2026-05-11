@@ -5,10 +5,20 @@ import CellClasses, CellVariables, SimulationVariables, CellDynamics
 import matplotlib.patches as mpatches
 from mpl_toolkits.axes_grid1.anchored_artists import AnchoredSizeBar
 import math
+import ui
+import sys
+from PyQt6.QtWidgets import QApplication
 
 
 # Initialises plot area, creates variables storing cell locations and draws cells on plot
 # Define plot and axes
+
+def IntialiseWindow(figure, axes):
+
+    window = ui.MainWindow(figure, axes)
+
+
+    return window
 
 def InitialisePlot():
     figure, axes = plt.subplots()
@@ -109,11 +119,15 @@ def Simulate(Cells):
         figure, axes = InitialisePlot()
         InitialiseLegend(axes)
         InitialiseScalebar(axes, figure)
+
+
         timer = axes.annotate("0s", xy=(20, 21), xytext=(40,20),horizontalalignment='right',color = 'black')
         # 3: Draws cells (if required)
         for cell in Cells:
             axes.add_artist(cell.Draw())
         plt.ion()
+        ui_window = IntialiseWindow(figure, axes)
+        #ui_window.show()
 
     # 4: Carries out simulation for number of ticks defined in SimulationVariables.py
     # If running in real time, runs simulation, animates and saves position of each cell at each tick
@@ -138,7 +152,9 @@ def Simulate(Cells):
                 # 8: For each cell, gets its new position and adds it to record of positions of each cell for each tick         
                 NewPosition.append([cell.Position.X,cell.Position.Y])
             RecordedPositions.append(NewPosition)
-            plt.pause(0.025)
+            #axes.cla()
+            plt.pause(0.05)
+            #plt.draw()
     
     # 4: Carries out simulation for number of ticks defined in SimulationVariables.py
     # If running as a replay, runs the simulation through and saves position of each cell at each tick, then draws animation based on saved data.

@@ -59,7 +59,10 @@
 #####################################################################################################################################
 
 
-import Simulation, SimulationVariables, CellVariables
+import Simulation, SimulationVariables, CellVariables, ui
+import sys
+from PyQt6.QtWidgets import QApplication
+
 
 Repeats = 3
 
@@ -73,17 +76,43 @@ adhesion_force_others = [0.0001,0.0005,0.001, 0.005, 0.01,0.05,0.1]
 adhesion_force_pmec_multiples = [0.75,1,1.5,2]
 internal_forces = [0.001, 0.005, 0.01, 0.05, 0.1]
 
-migration_speeds = [0.01]
-adhesion_force_others = [0.0005]
-adhesion_force_pmec_multiples = [2]
-internal_forces = [0.001]
-f = open("output2.txt", "w")
-f.write("migration_speed,adhesion_force_other,adhesion_force_pmec_multiple,internal_force,repeat,type,average_speed_x,average_speed_total\n")
-print("migration_speed,adhesion_force_other,adhesion_force_pmec_multiple,internal_force,repeat,type,average_speed_x,average_speed_total")
+migration_speeds = [0.05]
+adhesion_force_others = [0.01]
+adhesion_force_pmec_multiples = [1]
+internal_forces = [0.01]
+app = QApplication(sys.argv)
+
+Cells = Simulation.InitialiseCells()
+Cells, RecordedPositions = Simulation.Simulate(Cells)
+
+
+app.exec()
 
 
 
-for migration_speed in migration_speeds:
+
+
+
+
+
+
+
+
+
+
+
+
+
+#f = open("output2.txt", "w")
+#f.write("migration_speed,adhesion_force_other,adhesion_force_pmec_multiple,internal_force,repeat,type,average_speed_x,average_speed_total\n")
+#print("migration_speed,adhesion_force_other,adhesion_force_pmec_multiple,internal_force,repeat,type,average_speed_x,average_speed_total")
+
+
+
+
+
+
+"""for migration_speed in migration_speeds:
     SimulationVariables.MigrationSpeed = migration_speed
     for adhesion_force in adhesion_force_others:
         CellVariables.OverallCellTypes[2].Interactions.InternalForce = adhesion_force
@@ -109,6 +138,6 @@ for migration_speed in migration_speeds:
                                 str((item[3]/item[1])/(SimulationVariables.TickNumber*SimulationVariables.TickLength)))
                         f.write('\n')
                         
-f.close()
+f.close()"""
 
             

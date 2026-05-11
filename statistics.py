@@ -3,6 +3,36 @@
 # to do:
 # use more efficient/simpler method of grouping (pandas data frames, groupby?)
 
+import pandas as pd
+
+df = pd.read_csv('output_short.csv')
+
+
+print(df.index.names)
+print(df.columns)
+names = df.columns.to_list()
+
+pmecs = df[df['type'] == "PMEC"].drop(['average_speed_total','type'], axis = 1)
+
+pmecs = pmecs.set_index(['migration_speed','repeat','adhesion_force_pmec_multiple','internal_force','adhesion_force_other'])
+pmecs = pmecs.unstack('adhesion_force_other')
+
+#mean = pmecs.groupby(['migration_speed','adhesion_force_other','adhesion_force_pmec_multiple','internal_force']).agg(
+ #   mean_speed_x = ('average_speed_x','mean'))
+
+
+
+
+
+print(pmecs.to_string())
+
+#print(mean.to_string())
+
+
+#df.groupby()
+
+
+"""
 class DataClass:
     def __init__ (self, migration_speed, adhesion_force_other, adhesion_force_pmec_multiple, internal_force, type, repeat, average_speed_x, average_speed_total):
         self.migration_speed = migration_speed
@@ -145,8 +175,6 @@ for item in data:
 #for item in grouped_data:
 #    print(item.migration_speed, item.adhesion_force_pmec_multiple,item.internal_force,item.type,item.adhesion_force_other)
 
-print(len(data),len(grouped_data))
-
 
 # for each item in the list
 # ignoring first and last adhesion force
@@ -157,9 +185,11 @@ print(len(data),len(grouped_data))
 from scipy import stats
 
 parameters_of_interest = []
+critical_p_val = 0.2
+
+
 for item in grouped_data:
     if item.type == "Other":
-        local_maxima = False
         for n, adhesion in enumerate(item.adhesion_force_other):
             if n > 0 and n < len(item.adhesion_force_other) - 1:
                 mean = sum(item.average_speed_x[n]) / len(item.average_speed_x[n])
@@ -170,9 +200,8 @@ for item in grouped_data:
                     
                     _ , p_val_low = stats.ttest_ind(item.average_speed_x[n], item.average_speed_x[n - 1])
                     _ , p_val_high = stats.ttest_ind(item.average_speed_x[n], item.average_speed_x[n + 1])
-                    if p_val_low < 0.1 and p_val_high < 0.1:
+                    if p_val_low < critical_p_val and p_val_high < critical_p_val:
                         print("local maxima (",n,"):", mean, ">", previous_mean, "(p =",p_val_low,");",mean,">",next_mean,"(p =",p_val_high,")")
-                        local_maxima = True
                         parameters_of_interest.append([item, p_val_low, p_val_high])
 
                 
@@ -183,8 +212,9 @@ for item in grouped_data:
 
 for item in parameters_of_interest:
     print (item[0].parameters())
-
-print(len(parameters_of_interest))
+    print ("({:2f},{:2f})".format(item[1],item[2]))
+    print("")
+"""
 
 
 

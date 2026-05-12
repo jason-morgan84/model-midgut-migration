@@ -7,31 +7,34 @@ import pandas as pd
 
 df = pd.read_csv('output_short.csv')
 
-
-print(df.index.names)
-print(df.columns)
-names = df.columns.to_list()
-
-pmecs = df[df['type'] == "PMEC"].drop(['average_speed_total','type'], axis = 1)
-
-pmecs = pmecs.set_index(['migration_speed','repeat','adhesion_force_pmec_multiple','internal_force','adhesion_force_other'])
-pmecs = pmecs.unstack('adhesion_force_other')
-
-#mean = pmecs.groupby(['migration_speed','adhesion_force_other','adhesion_force_pmec_multiple','internal_force']).agg(
- #   mean_speed_x = ('average_speed_x','mean'))
+df = df.sort_values(by = ['migration_speed','adhesion_force_pmec_multiple','internal_force','type','adhesion_force_other','repeat'])
 
 
 
+df_all = df[df['type'] != "VM"].drop(['average_speed_total'], axis = 1)
+df_all = df_all.set_index(['migration_speed','repeat','adhesion_force_pmec_multiple','internal_force','adhesion_force_other','type'])
+
+df_wide = df_all.unstack('type').unstack('adhesion_force_other').unstack('repeat')
+
+df_all_means = df_all.groupby(['migration_speed','adhesion_force_other','adhesion_force_pmec_multiple','internal_force','type']).agg(
+    mean_speed_x = ('average_speed_x','mean'))
+
+#df_all_means["ratio"] = df_all_means[1]/df_all_means[2]
+df_all_means = df_all_means.unstack('type')
+print(df_all_means.to_string())
+#print(df_all_means['mean_speed_x'].to_string())
+
+df_all_means = df_all_means.reset_index(['migration_speed','adhesion_force_other','adhesion_force_pmec_multiple','internal_force','mean_speed_x'])
 
 
-print(pmecs.to_string())
+print(df_all_means.to_string())
+print(df_all_means.columns)
+#print(df_wide.to_string())
 
-#print(mean.to_string())
+#print(df_all_means.unstack('type').to_string())
 
 
-#df.groupby()
-
-
+#print(df_all_means['migration_speed'].to_string())
 """
 class DataClass:
     def __init__ (self, migration_speed, adhesion_force_other, adhesion_force_pmec_multiple, internal_force, type, repeat, average_speed_x, average_speed_total):
